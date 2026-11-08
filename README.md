@@ -36,9 +36,11 @@ Android 10 – Android 16 的 HyperOS，LSPosed 2.2.x（libxposed API 100+）。
 | 行为库 | 按 `screenshot` / `screen_share` / `voip_record` 等 8 张表名拦截 `SQLiteDatabase` 写入 |
 | 静默录屏 | `MediaProjection#createVirtualDisplay` 不再建立 |
 | XSOF | Provider / AIDL / 写库 / 评分四层 |
-| 整进程断网 | SystemHelper、小米统计 |
+| 整进程断网 | 小米统计（SystemHelper 默认只拦上报域名与方法层） |
 
-覆盖组件：SystemHelper、系统安全组件、安全中心、小米统计、应用安装器、应用商店、小米服务框架、运营商服务、小米可信服务、翻译组件。
+覆盖组件：SystemHelper、系统安全组件、安全中心、小米统计、应用安装器、应用商店、小米服务框架、运营商服务、移动 DM、系统诊断、小米可信服务、翻译组件、广告组件（MSA）。
+
+支持自定义规则（域名、域名/路径、`类名#方法`）；界面跟随系统语言与深色模式。
 
 会影响系统功能的规则一律默认关闭（云查、XSOF 合作方鉴权、月报、防窥分类、地震报警定位、ADB 验证、设备证书、运营商注册），副标题写明代价。
 
