@@ -13,6 +13,7 @@
 > 源码与构建说明：[vivibibi30/hyperpguard](https://github.com/vivibibi30/hyperpguard)
 >
 > 本项目源码
+> English README: [vivibibi30/hyperpguard · README.en.md](https://github.com/vivibibi30/hyperpguard/blob/main/README.en.md)
 
 ## 当前支持的版本
 
