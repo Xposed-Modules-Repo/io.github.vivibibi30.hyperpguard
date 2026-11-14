@@ -6,50 +6,44 @@
 ![language](https://img.shields.io/badge/language-Java-orange)
 ![release](https://img.shields.io/github/v/release/vivibibi30/hyperpguard?label=release&color=green)
 
-在采集入口、本地存储、对外接口、网络出口四层拦截 HyperOS 预装组件的隐私上报
+在采集入口、本地存储、对外接口、网络出口四个层面，按应用给行为加开关
 
 </div>
 
-> 源码与构建说明：[vivibibi30/hyperpguard](https://github.com/vivibibi30/hyperpguard)
+> 源码、构建说明与完整文档：[vivibibi30/hyperpguard](https://github.com/vivibibi30/hyperpguard)
 >
-> 本项目源码
-> English README: [vivibibi30/hyperpguard · README.en.md](https://github.com/vivibibi30/hyperpguard/blob/main/README.en.md)
+> **本仓库只是 LSPosed 的索引仓**：放 APK 与简介；源码、issue、更新日志都在源码仓。
 
-## 当前支持的版本
+## 支持的版本
 
-Android 10 – Android 16 的 HyperOS，LSPosed 2.2.x（libxposed API 100+）。
+Android 10 – Android 16（对应平台），LSPosed 2.2.x（模块依赖 libxposed API 102，兼容 100+）。
 
-## 使用前说明
+## 使用
 
 1. 在 LSPosed 中启用「HyperPGuard」
-2. 打开应用，首次会向 LSPosed 请求全部作用域，允许即可；也可在 LSPosed 里手动勾选
-3. 在模块里对目标应用点一次「重启」，或点批量行的「全部重启」，让应用重新加载
+2. 打开应用，首次会向 LSPosed 请求作用域，允许即可；也可手动勾选
+3. 对目标应用点一次「重启」，或点批量行的「全部重启」，让应用重新加载
 4. 「重启」「查看记录」需要 root，首次使用请允许 KernelSU / Magisk 授权
 
 作用域外的应用不会被注入。
 
-## 功能
+## 功能（按能力分类，不逐一举目标组件与包名）
 
-| 层 | 内容 |
+| 层面 | 控制对象 |
 |---|---|
-| 网络出口 | `URL#openConnection`、`InetAddress`、`Socket` 三处拦截，规则为「域名后缀 + 可选路径」 |
-| 隐私 API | 应用列表、使用记录、设备标识、短信发送、XMSF 代发广播 |
-| 行为库 | 按 `screenshot` / `screen_share` / `voip_record` 等 8 张表名拦截 `SQLiteDatabase` 写入 |
-| 静默录屏 | `MediaProjection#createVirtualDisplay` 不再建立 |
-| XSOF | Provider / AIDL / 写库 / 评分四层 |
-| 整进程断网 | 小米统计（SystemHelper 默认只拦上报域名与方法层） |
+| 网络出口 | 目标进程内的 `URL`、`InetAddress`、`Socket`，规则为「域名后缀 + 可选路径」 |
+| 本地存储 | 指定行为库的 `SQLiteDatabase` 写入，按表名过滤 |
+| 跨应用接口 | Provider、AIDL、回调型方法，按签名匹配 |
+| 采集入口 | 应用列表、使用记录、设备标识等系统查询接口 |
 
-覆盖组件：SystemHelper、系统安全组件、安全中心、小米统计、应用安装器、应用商店、小米服务框架、运营商服务、移动 DM、系统诊断、小米可信服务、翻译组件、广告组件（MSA）。
-
-支持自定义规则（域名、域名/路径、`类名#方法`）；界面跟随系统语言与深色模式。
-
-会影响系统功能的规则一律默认关闭（云查、XSOF 合作方鉴权、月报、防窥分类、地震报警定位、ADB 验证、设备证书、运营商注册），副标题写明代价。
+- 每个应用在界面里是一张卡片：右上角是它在 LSPosed 中的作用域开关，卡片内逐项规则可单独开关
+- 支持自定义规则：域名、域名/路径、`类名#方法`
+- **会影响系统功能的规则一律默认关闭**（云查、鉴权、月报、防窥分类、地震报警定位、ADB 验证、设备证书、运营商注册等），副标题写明代价
+- 需要精确拦截范围时，请在自己的设备上对照界面里每个开关的描述；本页不列举具体包名
 
 ## 界面
 
-| 总开关 / 批量操作 | 分组卡片 |
-|---|---|
-| ![主界面](https://raw.githubusercontent.com/vivibibi30/hyperpguard/main/docs/images/ui-main.png) | ![分组卡片](https://raw.githubusercontent.com/vivibibi30/hyperpguard/main/docs/images/ui-cards.png) |
+![主界面：总开关、路径特征、记录未命中访问](https://raw.githubusercontent.com/vivibibi30/hyperpguard/main/docs/images/ui-home.png)
 
 ## 常见问题
 
@@ -58,12 +52,9 @@ Android 10 – Android 16 的 HyperOS，LSPosed 2.2.x（libxposed API 100+）。
 - **功能异常**：对应的默认关闭子项被打开了，按需关掉即可
 - **方法层出现 `hook miss`**：组件版本变化，网络层与隐私 API 层不受影响
 
-## 致谢
+## 说明
 
-[HyperCeiler](https://github.com/ReChronoRain/HyperCeiler) · [XSOF Privacy](https://github.com/yunyizea/xsof-privacy) · [HyperOS4-XSOF-Analysis](https://github.com/FAQQAQ/HyperOS4-XSOF-Analysis) · [酷安 @OSAKOo](https://www.coolapk.com/feed/74882729?s=MzNlYzk4NWUxNWZhMjRnNmFlZTFjMDJ6a1664) · [Android OS Privacy Under the Loupe](https://ar5iv.labs.arxiv.org/html/2302.01890)（ACM WiSec '23）· [酷安 RooyCo](https://www.coolapk.com/feed/74911090) · [frauddb](https://github.com/acnekot/frauddb) · [misight-viewer](https://github.com/Artriai/misight-viewer) · [libxposed API](https://github.com/libxposed/api) · LSPosed
-
-## 免责声明
-
-仅供在本人拥有完全控制权的设备上学习研究使用，不做商业分发。完整条款见 [DISCLAIMER.txt](https://github.com/vivibibi30/hyperpguard/blob/main/DISCLAIMER.txt)。
-
-[GPL-3.0](https://github.com/vivibibi30/hyperpguard/blob/main/LICENSE)；第三方组件的许可见 [NOTICE](https://github.com/vivibibi30/hyperpguard/blob/main/NOTICE)。
+- 本模块只作用于**你拥有或获授权的设备**上的进程，不提供也不协助中断他人设备或服务
+- 与设备厂商、应用开发者无隶属或合作关系；商标归各自权利人
+- 模块本体不联网：仅在手动点「检查更新」时向 GitHub API 查询一次版本号，不发送设备标识或使用数据
+- GPL-3.0；源码与问题反馈见 [vivibibi30/hyperpguard](https://github.com/vivibibi30/hyperpguard)
